@@ -11,6 +11,15 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
+//solve CORS issues
+app.use(cors({ credentials: true, origin: 'http://localhost:300' }))
+
+//upload directory
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
+
+//DB connection
+require('./config/db,js')
+
 //rotas
 const router = require('./routes/Router.js')
 
