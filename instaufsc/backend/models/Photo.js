@@ -1,22 +1,20 @@
-const mongoose = require('mongoose')
-const { Schema } = mongoose
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const photoSchema = new Schema(
   {
-    image: String,
+    image: String, //caminho do arquivo
     title: String,
     likes: Array,
     comments: Array,
-
-    userId: mongoose.ObjectId,
-
-    userName: String
+    userId: mongoose.ObjectId, //usuário que inseriu a foto (é uma string diferente, padrão mongoose)
+    userName: String, //para associar o nome do usuário à foto
   },
   {
-    timestamps: true
+    timestamps: true,
   }
-)
+);
 
-const Photo = mongoose.model('Photo', photoSchema)
+const Photo = mongoose.model("Photo", photoSchema);
 
-module.exports = Photo
+module.exports = Photo;
