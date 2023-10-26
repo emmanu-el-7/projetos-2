@@ -3,6 +3,11 @@ import './Auth.css'
 import { NavLink } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
+import { register, reset } from '../../slices/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
+
+import Message from '../../components/Message'
+
 const Register = () => {
   const [user, setUser] = useState({
     name: '',
@@ -11,13 +16,25 @@ const Register = () => {
     confirmPassword: ''
   })
 
+  const dispatch = useDispatch()
+
+  const { loading, error } = useSelector(state => state.auth)
+
   const handleChange = e => {
     setUser({ ...user, [e.target.name]: e.target.value })
   }
 
   const handleSubmit = e => {
     e.preventDefault()
+
+    console.log(user)
+
+    dispatch(register(user))
   }
+
+  useEffect(() => {
+    dispatch(reset())
+  }, [dispatch])
 
   return (
     <div id='register'>
@@ -54,6 +71,9 @@ const Register = () => {
           onChange={handleChange}
           value={user.confirmPassword}
         />
+        {!loading && <input type='submit' value='Cadastrar' />}
+        {loading && <input type='submit' value='Aguarde...' disabled />}
+        {error && <Message msg={error} type='error' />}
         <input type='submit' value='Cadastrar' />
         <p>
           Já possui cadastro? <NavLink to='/login'>Clique aqui</NavLink>
