@@ -1,13 +1,11 @@
-import './Footer.css'
+import "./Footer.css";
 
 const Footer = () => {
   return (
-    <div>
-      <footer id='footer'>
-        <p>InstaUFSC &copy; 2023</p>
-      </footer>
-    </div>
-  )
-}
+    <footer id="footer">
+      <p>InstaUFSC &copy; 2023</p>
+    </footer>
+  );
+};
 
-export default Footer
+export default Footer;
