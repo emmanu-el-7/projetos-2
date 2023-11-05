@@ -15,8 +15,24 @@ const profile = async (data, token) => {
   }
 }
 
+//atualizar perfil de usuário
+const updateProfile = async (data, token) => {
+  const config = requestConfig('PUT', data, token, true) //true, porque pode conter imagens
+
+  try {
+    const res = await fetch(api + '/users', config) //acessa a API
+      .then(res => res.json()) //transforma os dados recebidos para JSON
+      .catch(err => err) //pega eventual erro da requisição
+
+    return res //retorna a resposta
+  } catch (error) {
+    console.log(error) //loga os erros, caso ocorram
+  }
+}
+
 const userService = {
-  profile
+  profile,
+  updateProfile
 }
 
 export default userService
