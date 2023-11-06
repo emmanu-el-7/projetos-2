@@ -36,6 +36,18 @@ export const updateProfile = createAsyncThunk(
       return thunkAPI.rejectWithValue(data.errors[0])
     }
 
+    //recuperar os dados de usuário por id
+    const getUserDetails = createAsyncThunk(
+      'user/get',
+      async (id, thunkAPI) => {
+        //desta vez não há token, ou seja, é uma rota pública
+
+        const data = await userService.getUserDetails(id)
+
+        return data
+      }
+    )
+
     return data
   }
 )
@@ -78,6 +90,17 @@ export const userSlice = createSlice({
         state.loading = false
         state.error = action.payload
         state.user = {}
+      })
+      .addCase(getUserDetails.pending, state => {
+        state.loading = true
+        state.error = false
+      })
+      .addCase(getUserDetails.fulfilled, (state, action) => {
+        //action é o 'data' que vem da requisição
+        state.loading = false
+        state.success = true
+        state.error = null
+        state.user = action.payload //profile funcionou, então passa o usuário
       })
   }
 })

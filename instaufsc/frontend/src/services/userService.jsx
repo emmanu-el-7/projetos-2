@@ -30,9 +30,25 @@ const updateProfile = async (data, token) => {
   }
 }
 
+//Recuperar os dados do usuário por id
+const getUserDetails = async id => {
+  const config = requestConfig('GET') //não há token, pois podemos ver o perfil de outros usuários
+
+  try {
+    const res = await fetch(api + '/users/' + id, config) //acessa a API
+      .then(res => res.json()) //transforma os dados recebidos para JSON
+      .catch(err => err) //pega eventual erro da requisição
+
+    return res
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const userService = {
   profile,
-  updateProfile
+  updateProfile,
+  getUserDetails
 }
 
 export default userService

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react' //hooks
 import { useSelector, useDispatch } from 'react-redux' //hooks do redux
 import { useForm } from 'react-hook-form'
 
-import { profile, resetMessage } from '../../slices/userSlice' //funções do reducer de usuário
+import { profile, resetMessage, updateProfile } from '../../slices/userSlice' //funções do reducer de usuário
 
 import Message from '../../components/Message' //componente de mensagens da aplicação
 
@@ -59,8 +59,22 @@ const EditProfile = () => {
     }
   }, [user])
 
-  const onSubmit = data => {
-    console.log(data)
+  const onSubmit = async data => {
+    //vamos construir um objeto form=data que será passado pela requisição
+    const formData = new FormData()
+
+    const userFormData = Object.keys(data).forEach(key =>
+      formData.append(key, data[key])
+    )
+
+    formData.append('user', userFormData)
+
+    await dispatch(updateProfile(formData))
+
+    //definimos um timeout de dois segundos, tempo de ver a mensagem
+    setTimeout(() => {
+      dispatch(resetMessage())
+    }, 2000)
   }
 
   return (
@@ -108,7 +122,10 @@ const EditProfile = () => {
             placeholder='Digite sua nova senha'
           />
         </label>
-        <input type='submit' value='Atualizar' />
+        {!loading && <input type='submit' value='Atualizar' />}
+        {loading && <input type='submit' value='Aguarde...' disabled />}
+        {error && <Message msg={error} type='error' />}
+        {message && <Message msg={message} type='succes' />}
       </form>
     </div>
   )

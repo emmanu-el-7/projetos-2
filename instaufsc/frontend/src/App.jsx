@@ -8,6 +8,7 @@ import Register from './pages/Auth/Register'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import EditProfile from './pages/EditProfile/EditProfile'
+import Profile from './pages/Profile/Profile'
 
 function App () {
   //pegamos as informações exportadas pelo nosso hook
@@ -43,6 +44,11 @@ function App () {
               <Route
                 path='/profile'
                 element={auth ? <EditProfile /> : <Navigate to='/login' />}
+              />
+              {/* só pode acessar a página de postagem de fotos se estiver autenticado, senão vai para o login */}
+              <Route
+                path='/users/:id'
+                element={auth ? <Profile /> : <Navigate to='/login' />}
               />
             </Routes>
           </div>
