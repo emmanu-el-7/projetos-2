@@ -1,50 +1,51 @@
-import './EditProfile.css'
+import "./EditProfile.css";
 
-import { useEffect, useState } from 'react' //hooks
-import { useSelector, useDispatch } from 'react-redux' //hooks do redux
-import { useForm } from 'react-hook-form'
+import { uploads } from "../../utils/config"; //pasta de armazenamento de imagens
 
-import { profile, resetMessage, updateProfile } from '../../slices/userSlice' //funções do reducer de usuário
+import { useEffect, useState } from "react"; //hooks
+import { useSelector, useDispatch } from "react-redux"; //hooks do redux
+import { useForm } from "react-hook-form";
 
-import Message from '../../components/Message' //componente de mensagens da aplicação
+import { profile, resetMessage, updateProfile } from "../../slices/userSlice"; //funções do reducer de usuário
+
+import Message from "../../components/Message"; //componente de mensagens da aplicação
 
 const EditProfile = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const { user, message, error, loading } = useSelector(state => state.user) //states de usuário
+  const { user, message, error, loading } = useSelector((state) => state.user); //states de usuário
 
-  const { register, handleSubmit, reset, watch, getValues } = useForm()
+  const { register, handleSubmit, reset, watch, getValues } = useForm();
 
-  const [previewImage, setPreviewImage] = useState('') //nova imagem, caso seja selecionada
+  const [previewImage, setPreviewImage] = useState(""); //nova imagem, caso seja selecionada
 
   //monitoramento de mudanças do useForm
-  const previewImageWatch = watch('previewImage', '')
+  const previewImageWatch = watch("previewImage", "");
 
   //sempre que um novo arquivo for selecionado, esse useEffect irá executar
   useEffect(() => {
-    let newImage = ''
-
-    const image = getValues('previewImage')
+    let newImage = "";
+    const image = getValues("previewImage");
 
     //se não há imagem, irá atribuir uma string vazia
     if (image) {
-      newImage = image[0]
+      newImage = image[0];
     }
 
     //aqui atualizamos o state da pré-visualização
-    setPreviewImage(newImage)
+    setPreviewImage(newImage);
 
     //aqui atualizamos o state da imagem de perfil, que poderá ser salva pelo usuário
-    reset(previousState => ({
+    reset((previousState) => ({
       ...previousState,
-      profileImage: newImage
-    }))
-  }, [previewImageWatch])
+      profileImage: newImage,
+    }));
+  }, [previewImageWatch]);
 
   //carregar os dados de usuário
   useEffect(() => {
-    dispatch(profile())
-  }, [dispatch]) //será executado sempre que houver um dispatch deste componente
+    dispatch(profile());
+  }, [dispatch]); //será executado sempre que houver um dispatch deste componente
 
   //preenchimento inicial do formulário com dados do usuário
   useEffect(() => {
@@ -54,38 +55,38 @@ const EditProfile = () => {
         email: user.email,
         bio: user.bio,
         password: user.password,
-        profileImage: user.profileImage //imagem de perfil já existente
-      })
+        profileImage: user.profileImage, //imagem de perfil já existente
+      });
     }
-  }, [user])
+  }, [user]);
 
-  const onSubmit = async data => {
-    //vamos construir um objeto form=data que será passado pela requisição
-    const formData = new FormData()
+  const onSubmit = async (data) => {
+    //vamos construir um objeto form-data que será passado pela requisição
+    const formData = new FormData();
 
-    const userFormData = Object.keys(data).forEach(key =>
+    const userFormData = Object.keys(data).forEach((key) =>
       formData.append(key, data[key])
-    )
+    );
 
-    formData.append('user', userFormData)
+    formData.append("user", userFormData);
 
-    await dispatch(updateProfile(formData))
+    await dispatch(updateProfile(formData));
 
     //definimos um timeout de dois segundos, tempo de ver a mensagem
     setTimeout(() => {
-      dispatch(resetMessage())
-    }, 2000)
-  }
+      dispatch(resetMessage());
+    }, 2000);
+  };
 
   return (
-    <div id='edit-profile'>
+    <div id="edit-profile">
       <h2>Edite seus dados</h2>
-      <p className='subtitle'>
+      <p className="subtitle">
         Adicione uma imagem de perfil e conte mais sobre você...
       </p>
       {(user.profileImage || previewImage) && (
         <img
-          className='profile-image'
+          className="profile-image"
           src={
             previewImage
               ? URL.createObjectURL(previewImage) //imagem selecionada, mas ainda não enviada para o banco de dados
@@ -94,41 +95,41 @@ const EditProfile = () => {
         />
       )}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input {...register('name')} type='text' placeholder='Nome' />
+        <input {...register("name")} type="text" placeholder="Nome" />
         {/* o input do e-mail é apenas para visualização, pois o e-mail não pode ser alterado */}
         <input
-          {...register('email')}
-          type='email'
-          placeholder='E-mail'
+          {...register("email")}
+          type="email"
+          placeholder="E-mail"
           disabled
         />
         <label>
           <span>Imagem do Perfil:</span>
-          <input {...register('previewImage')} type='file' />
+          <input {...register("previewImage")} type="file" />
         </label>
         <label>
           <span>Bio:</span>
           <input
-            {...register('bio')}
-            type='text'
-            placeholder='Descrição do perfil'
+            {...register("bio")}
+            type="text"
+            placeholder="Descrição do perfil"
           />
         </label>
         <label>
           <span>Deseja alterar sua senha?</span>
           <input
-            {...register('password')}
-            type='password'
-            placeholder='Digite sua nova senha'
+            {...register("password")}
+            type="password"
+            placeholder="Digite sua nova senha"
           />
         </label>
-        {!loading && <input type='submit' value='Atualizar' />}
-        {loading && <input type='submit' value='Aguarde...' disabled />}
-        {error && <Message msg={error} type='error' />}
-        {message && <Message msg={message} type='succes' />}
+        {!loading && <input type="submit" value="Atualizar" />}
+        {loading && <input type="submit" value="Aguarde..." disabled />}
+        {error && <Message msg={error} type="error" />}
+        {message && <Message msg={message} type="success" />}
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default EditProfile
+export default EditProfile;
