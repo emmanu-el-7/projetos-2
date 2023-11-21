@@ -1,25 +1,27 @@
-import './LikeContainer.css'
-import { BsHeart, BsHeartFill } from 'react-icon/bs'
+import "./LikeContainer.css";
 
-//como props, receba o usuário, a foto e uma função de atribuição
-const LikeContainer = ({ photo, user, handlelike }) => {
+//importação dos ícones de coração
+import { BsHeart, BsHeartFill } from "react-icons/bs";
+
+//como props, recebe o usuário, a foto e uma função de atribuição
+const LikeContainer = ({ photo, user, handleLike }) => {
   return (
-    <div className='like'>
+    <div className="like">
       {photo.likes && user && (
         <>
           {photo.likes.includes(user._id) ? (
-            //Se o usuário já curtiu sua foto, mostra o coração cheio
+            // Se o usuário já curtiu a foto, mostra o coração cheio
             <BsHeartFill />
           ) : (
-            //se o usuário ainda não curtiu a foto, mostra o coração vazio
-            <BsHeart onClick={() => handlelike(photo)} />
+            // Se o usuário ainda não curtiu a foto, mostra o coração vazio com botão de curtir
+            <BsHeart onClick={() => handleLike(photo)} />
           )}
           {/* contador dos likes */}
-          <p>{photo.likes.length} like(s)</p>)
+          <p>{photo.likes.length} like(s)</p>
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default LikeContainer
+export default LikeContainer;

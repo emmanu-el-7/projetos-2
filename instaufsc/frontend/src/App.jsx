@@ -10,6 +10,7 @@ import Footer from "./components/Footer";
 import EditProfile from "./pages/EditProfile/EditProfile";
 import Profile from "./pages/Profile/Profile";
 import Photo from "./pages/Photo/Photo";
+import Search from "./pages/Search/Search";
 
 function App() {
   //pegamos as informações exportadas pelo nosso hook
@@ -56,6 +57,11 @@ function App() {
               <Route
                 path="/photos/:id"
                 element={auth ? <Photo /> : <Navigate to="/login" />}
+              />
+              {/* só pode acessar a busca se estiver autenticado, senão vai para o Login */}
+              <Route
+                path="/search"
+                element={auth ? <Search /> : <Navigate to="/login" />}
               />
             </Routes>
           </div>

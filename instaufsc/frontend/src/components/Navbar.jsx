@@ -18,6 +18,8 @@ const Navbar = () => {
   const { auth } = useAuth(); //pegamos a informação sobre autenticação do nosso hook
   const { user } = useSelector((state) => state.auth); //pegamos o usuário do initialState do slice
 
+  const [query, setQuery] = useState("");
+
   const navigate = useNavigate();
 
   const dispatch = useDispatch(); //o dispatch é quem nos possibilita chamarmos as funções Redux
@@ -30,12 +32,24 @@ const Navbar = () => {
     navigate("login"); //depois da desconexão, redirecionamos o usuário para a tela de login
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+
+    if (query) {
+      return navigate(`search?q=${query}`);
+    }
+  };
+
   return (
     <nav id="nav">
       <NavLink to={"/"}>InstaUFSC</NavLink>
-      <form id="search-form">
+      <form id="search-form" onSubmit={handleSearch}>
         <BsSearch />
-        <input type="text" placeholder="Pesquisar" />
+        <input
+          type="text"
+          placeholder="Pesquisar"
+          onChange={(e) => setQuery(e.target.value)}
+        />
       </form>
       <ul id="nav-links">
         {auth ? (
