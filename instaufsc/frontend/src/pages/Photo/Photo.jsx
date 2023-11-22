@@ -1,90 +1,88 @@
-import "./Photo.css";
+import './Photo.css'
 
-import { uploads } from "../../utils/config";
+import { uploads } from '../../utils/config'
 
-import Message from "../../components/Message";
-import PhotoItem from "../../components/PhotoItem";
-import LikeContainer from "../../components/LikeContainer";
-import { NavLink } from "react-router-dom";
+import Message from '../../components/Message'
+import PhotoItem from '../../components/PhotoItem'
+import LikeContainer from '../../components/LikeContainer'
+import { NavLink } from 'react-router-dom'
 
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
-import { getPhoto, like, comment } from "../../slices/photoSlice";
-import { useResetMessageComponent } from "../../hooks/useResetMessageComponent";
+import { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import { getPhoto, like, comment } from '../../slices/photoSlice'
+import { useResetMessageComponent } from '../../hooks/useResetMessageComponent'
 
 const Photo = () => {
-  const { id } = useParams();
+  const { id } = useParams()
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const resetMessage = useResetMessageComponent(dispatch);
+  const resetMessage = useResetMessageComponent(dispatch)
 
-  const { user } = useSelector((state) => state.auth);
-  const { photo, loading, error, message } = useSelector(
-    (state) => state.photo
-  );
+  const { user } = useSelector(state => state.auth)
+  const { photo, loading, error, message } = useSelector(state => state.photo)
 
-  const [commentText, setCommentText] = useState("");
+  const [commentText, setCommentText] = useState('')
 
   //carregamento dos dados da foto
   useEffect(() => {
-    dispatch(getPhoto(id));
-  }, [dispatch, id]);
+    dispatch(getPhoto(id))
+  }, [dispatch, id])
 
   const handleLike = () => {
-    dispatch(like(photo._id));
+    dispatch(like(photo._id))
 
-    resetMessage();
-  };
+    resetMessage()
+  }
 
-  const handleComment = (e) => {
-    e.preventDefault();
+  const handleComment = e => {
+    e.preventDefault()
 
     const commentData = {
       comments: commentText,
-      id: photo._id,
-    };
+      id: photo._id
+    }
 
-    dispatch(comment(commentData));
+    dispatch(comment(commentData))
 
-    setCommentText("");
+    setCommentText('')
 
-    resetMessage();
-  };
+    resetMessage()
+  }
 
   if (loading) {
-    return <p>Carregando...</p>;
+    return <p>Carregando...</p>
   }
 
   return (
-    <div id="photo">
+    <div id='photo'>
       <PhotoItem photo={photo} />
       <LikeContainer photo={photo} user={user} handleLike={handleLike} />
-      <div className="message-container">
-        {error && <Message msg={error} type="error" />}
-        {message && <Message msg={message} type="success" />}
+      <div className='message-container'>
+        {error && <Message msg={error} type='error' />}
+        {message && <Message msg={message} type='success' />}
       </div>
-      <div className="comments">
+      <div className='comments'>
         {photo.comments && (
           <>
             <h3>Comentários: ({photo.comments.length})</h3>
             <form onSubmit={handleComment}>
               <input
-                type="text"
-                placeholder="Insira o seu comentário"
-                onChange={(e) => setCommentText(e.target.value)}
+                type='text'
+                placeholder='Insira o seu comentário'
+                onChange={e => setCommentText(e.target.value)}
                 value={commentText}
               />
-              <input type="submit" value="Enviar" />
+              <input type='submit' value='Enviar' />
             </form>
             {photo.comments.length === 0 && (
               <p>Não há comentários atribuídos.</p>
             )}
-            {photo.comments.map((comment) => (
+            {photo.comments.map(comment => (
               // aqui é definida uma key como sendo o próprio comentário
-              <div className="comment" key={comment.comments}>
-                <div className="author">
+              <div className='comment' key={comment.comments}>
+                <div className='author'>
                   {comment.userImage && (
                     <img
                       src={`${uploads}/users/${comment.userImage}`}
@@ -102,7 +100,7 @@ const Photo = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Photo;
+export default Photo

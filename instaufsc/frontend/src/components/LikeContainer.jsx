@@ -1,12 +1,12 @@
-import "./LikeContainer.css";
+import './LikeContainer.css'
 
 //importação dos ícones de coração
-import { BsHeart, BsHeartFill } from "react-icons/bs";
+import { BsHeart, BsHeartFill } from 'react-icons/bs'
 
 //como props, recebe o usuário, a foto e uma função de atribuição
 const LikeContainer = ({ photo, user, handleLike }) => {
   return (
-    <div className="like">
+    <div className='like'>
       {photo.likes && user && (
         <>
           {photo.likes.includes(user._id) ? (
@@ -21,7 +21,7 @@ const LikeContainer = ({ photo, user, handleLike }) => {
         </>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default LikeContainer;
+export default LikeContainer
